@@ -1,3 +1,5 @@
+
+const cors = require('cors');
 const express = require('express');
 const app = express();
 app.use(express.json());
@@ -7,8 +9,36 @@ app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', true);
+  next();
+});
+
+const whitelist = ['http://localhost:5173']; // react-app의 주소
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (whitelist.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  next();
+});
+app.use(
+  cors(corsOptions)
+);
+
+
 app.get('/api/refugees/:id', (req, res) => { // 예시로 만든 api
   const id = req.params.id;
+  console.log(id);
   const refugee = getRefugee(id);
   if (!refugee) {
     res.status(404).send({ error: `Refugee ${id} not found`});

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Survey = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -20,30 +21,19 @@ const Survey = () => {
     }));
   };
 
-  const handleSendToDatabase = () => {
-    // fetch('/api/survey', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(answers),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => console.log(data))
-    //   .catch((err) => console.error(err));
-    // const id = 1;
-    // fetch(`/api/refugees/${id}`, {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(answers),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => console.log(data))
-    //   .catch((err) => console.error(err));
-    // }, [],);
+  const apiCall = async () => {
+    const id = 1;
+    try {
+      const response = await axios.get(`http://localhost:8080/api/refugees/${id}`);
+      const data = response.data;
+      console.log(data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  const handleSendToDatabase = () => {
+    // api call to send answers to database
   };
 
   return (
@@ -85,7 +75,7 @@ const Survey = () => {
 
       {currentStep < 3 && <button onClick={handleNextStep}>Next</button>}
       {currentStep === 3 && <button onClick={handleSendToDatabase}>Submit</button>}
-      <button onClick={handleSendToDatabase}>Query Test</button>
+      <button onClick={apiCall}>Query Test</button>
     </div>
   );
 };
