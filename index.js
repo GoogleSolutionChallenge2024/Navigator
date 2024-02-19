@@ -57,3 +57,4 @@ function getRefugee(id) {
   ];
   return refugees.find(r => r.id == id);
 }
+
