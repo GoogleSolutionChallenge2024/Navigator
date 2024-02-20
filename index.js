@@ -2,6 +2,8 @@ const cors = require('cors');
 const express = require('express');
 const { firebaseApp } = require('./dbconnect');
 const { getFirestore, collection, getDocs } = require("firebase/firestore");
+const admin = require('firebase-admin');
+const { doc, setDoc } = require("firebase/firestore"); 
 
 const db = getFirestore(firebaseApp);
 
@@ -18,7 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const whitelist = ['http://localhost:5173', "https://nevi.page", 'http://localhost:8080', "https://nevi-service-xivns55yhq-uw.a.run.app"]; // react-app의 주소
+const whitelist = ['http://localhost:5173', "https://nevi.page", 'http://localhost:8080', "https://nevi-service-xivns55yhq-uw.a.run.app"]; 
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin)) {
@@ -39,7 +41,9 @@ app.use(
   cors(corsOptions)
 );
 
-app.get('/api/refugees/:id', (req, res) => { // 예시로 만든 api
+
+// test api
+app.get('/api/refugees/:id', (req, res) => {
   const id = req.params.id;
   console.log(id);
   const refugee = getRefugee(id);
@@ -50,8 +54,9 @@ app.get('/api/refugees/:id', (req, res) => { // 예시로 만든 api
   }
 });
 
+// test DB
 function getRefugee(id) {
-  const refugees = [ // 임시방편으로 만들어놓은 DB
+  const refugees = [
     {id: 1, name: "First Ref", created_at: '2024-02-17', country: 'Poland'},
     {id: 2, name: "Second Ref", created_at: '2024-02-18', country: 'China'},
     {id: 3, name: "Third Ref", created_at: '2024-02-19', country: 'Hong Kong'},
@@ -61,10 +66,8 @@ function getRefugee(id) {
   return refugees.find(r => r.id == id);
 }
 
-// Firestore 컬렉션 가져오기
 const refugeesCollection = collection(db, "users");
 
-// 모든 난민 문서 가져오기
 const getRefugees = async () => {
   const querySnapshot = await getDocs(refugeesCollection);
   querySnapshot.forEach((doc) => {
@@ -83,5 +86,28 @@ app.get('/api/getRefugees', async (req, res) => {
   } catch (error) {
     console.error("Error getting refugees:", error);
     res.status(500).json({ success: false, error: "Error getting refugees" });
+  }
+});
+
+
+app.post('/api/addUser', async (req, res) => {
+  try {
+    const { country, education, gender, language, name, religion, result, user_id } = req.body;
+
+    await setDoc(doc(db, "users", `${name}-${user_id}`), {
+      country : country,
+      education : education,
+      gender : gender,
+      language : language,
+      name: name,
+      religion: religion,
+      result: result,
+      user_id: user_id,
+    });
+
+    res.status(201).send('User added successfully');
+  } catch (error) {
+    console.error('Error adding user: ', error);
+    res.status(500).send('Error adding user');
   }
 });
