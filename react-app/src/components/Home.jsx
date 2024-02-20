@@ -1,17 +1,17 @@
 import React from 'react';
-import GoogleLoginButton from './GoogleLoginBtn';
+import './home.css';
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <div>
-      <h1>Welcome to the Navigator!</h1>
-      <div id="g_id_onload" data-client_id="194913910245-tgqsbvjnh7nvaksfaabank3j4fq4fj15.apps.googleusercontent.com"
-        data-login_uri="http://localhost:5173/survey" data-auto_prompt="false">
+    <div className="view poppins-regular" >
+      <div className="center">
+      <img src="src/assets/logo.png" alt="Navigator logo" />
+      <h1>Navigator</h1>
+      <p>Find migration countries<br/>easily and quickly
+      </p>
       </div>
-      <div class="g_id_signin" data-type="standard" data size="large"
-        data-theme="filled_black" data-text="continue_with" data-shape="pill" data-logo_alignment="left">
-      </div>
-      <GoogleLoginButton/>
+      <Link to='/survey' className='btn poppins-semibold'>Finding migrant country</Link>
     </div>
   );
 };
