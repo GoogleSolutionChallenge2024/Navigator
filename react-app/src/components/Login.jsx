@@ -1,3 +1,5 @@
+import GoogleLoginButton from './GoogleLoginBtn';
+
 function Login() {
   return (
     <>
@@ -7,6 +9,7 @@ function Login() {
       <div class="g_id_signin" data-type="standard" data size="large"
         data-theme="filled_black" data-text="continue_with" data-shape="pill" data-logo_alignment="left">
       </div>
+      <GoogleLoginButton/>
   </>);
 }
 

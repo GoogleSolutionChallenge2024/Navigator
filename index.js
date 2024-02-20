@@ -1,6 +1,10 @@
-
 const cors = require('cors');
 const express = require('express');
+const { firebaseApp } = require('./dbconnect');
+const { getFirestore, collection, getDocs } = require("firebase/firestore");
+
+const db = getFirestore(firebaseApp);
+
 const app = express();
 app.use(express.json());
 app.use(express.static('react-app/dist'));
@@ -14,7 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const whitelist = ['http://localhost:5173']; // react-app의 주소
+const whitelist = ['http://localhost:5173', "https://nevi.page", 'http://localhost:8080', "https://nevi-service-xivns55yhq-uw.a.run.app"]; // react-app의 주소
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin)) {
@@ -34,7 +38,6 @@ app.use((req, res, next) => {
 app.use(
   cors(corsOptions)
 );
-
 
 app.get('/api/refugees/:id', (req, res) => { // 예시로 만든 api
   const id = req.params.id;
@@ -58,3 +61,27 @@ function getRefugee(id) {
   return refugees.find(r => r.id == id);
 }
 
+// Firestore 컬렉션 가져오기
+const refugeesCollection = collection(db, "users");
+
+// 모든 난민 문서 가져오기
+const getRefugees = async () => {
+  const querySnapshot = await getDocs(refugeesCollection);
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+  });
+};
+
+app.get('/api/getRefugees', async (req, res) => {
+  try {
+    const querySnapshot = await getDocs(refugeesCollection);
+    const refugees = [];
+    querySnapshot.forEach((doc) => {
+      refugees.push({ id: doc.id, data: doc.data() });
+    });
+    res.json({ success: true, refugees });
+  } catch (error) {
+    console.error("Error getting refugees:", error);
+    res.status(500).json({ success: false, error: "Error getting refugees" });
+  }
+});
