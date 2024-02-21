@@ -10,6 +10,8 @@ const Survey = () => {
   const [title,setTitle] = useState("Profile Setting");
   const [visible, setVisible] = useState(false);
   const [available, setAvailable] = useState(false);
+  const [yesClicked, setYesClicked] = useState(false);
+  const [noClicked, setNoClicked] = useState(false);
 
   const handleNextStep = () => {
     setCurrentStep(currentStep + 1);
@@ -30,32 +32,62 @@ const Survey = () => {
     }
   };
 
-  const handleAnswer = (question, answer) => {
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [question]: answer,
-    }));
-  };
-
-  const apiCall = async () => {
-    const id = 1;
-    try {
-      const response = await axios.get(`http://localhost:8080/api/refugees/${id}`);
-      const data = response.data;
-      console.log(data.data);
-    } catch (error) {
-      console.error(error);
+  const handleAnswer = (e) => {
+    console.log(currentStep, e.target.value);
+    switch (currentStep){
+      case 1:
+        setAnswers(prevAnswers => (({...prevAnswers, name: e.target.value})));
+        break;
+      case 2:
+        setAnswers(prevAnswers => (({...prevAnswers, gender: e.target.value})));
+        break;
+      case 3:
+        setAnswers(prevAnswers => (({...prevAnswers, country: e.target.value})));
+        break;
+      case 4:
+        setAnswers(prevAnswers => (({...prevAnswers, language: e.target.value})));
+        break;
+      case 5:
+        setAnswers(prevAnswers => (({...prevAnswers, religion: e.target.value})));
+        break;
+      case 6:
+        setAnswers(prevAnswers => (({...prevAnswers, job: e.target.value})));
+        break;
+      default:
+        break;
     }
   };
 
   const navigate = useNavigate();
-  const handleSendToDatabase = () => {
-    // api call to send answers to database
+
+
+  function fillNullValues(obj, defaultValue) {
+    const newObj = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        newObj[key] = obj[key] !== null ? obj[key] : defaultValue;
+      }
+    }
+    return newObj;
+  }
+  
+  
+
+  const handleSendToDatabase = async () => {
+    const answersWithDefaults = fillNullValues(answers, 'None');
+    console.log("보내기 전 ", answersWithDefaults);
+    try {
+      const res = await axios.post('http://localhost:8080/api/addUser', answersWithDefaults);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
     navigate('/result');
 };
 
 
   return (
+    <div className="wrap">
     <div className="display">
       <div className="upperBar">
         <button onClick={handlePreviousStep} id="goBack"><IoIosArrowBack size = {'1.5rem'}/></button>
@@ -69,81 +101,66 @@ const Survey = () => {
       {currentStep === 1 && (
         <div className="reply">
           <h2>What is your name?</h2>
-          {/* Render question 1 */}
-          <input></input>
+          <input onChange={handleAnswer}></input>
           {available && <img src="src/assets/CheckBox.png" className="check"></img>}
-          <button onClick={() => handleAnswer('question1', 'answer1')}>Answer 1</button>
-          <button onClick={() => handleAnswer('question1', 'answer2')}>Answer 2</button>
         </div>
       )}
       {currentStep === 2 && (
         <div className="reply">
           <h2>What is your gender?</h2>
-          {/* Render question 2 */}
-          <input></input>
+          <input onChange={handleAnswer}></input>
           {available&&<img src="src/assets/CheckBox.png" className="check"></img>}
-          <button onClick={() => handleAnswer('question2', 'answer1')}>Answer 1</button>
-          <button onClick={() => handleAnswer('question2', 'answer2')}>Answer 2</button>
         </div>
       )}
       {currentStep === 3 && (
         <div className="reply">
-          <h2>What are you from?</h2>
-          {/* Render question 3 */}
-          <input></input>
-          {available&&<img src="src/assets/CheckBox.png" className="check"></img>}        
-          <button onClick={() => handleAnswer('question3', 'answer1')}>Answer 1</button>
-          <button onClick={() => handleAnswer('question3', 'answer2')}>Answer 2</button>
+          <h2>Where are you from?</h2>
+          <input onChange={handleAnswer}></input>
+          {available&&<img src="src/assets/CheckBox.png" className="check"></img>}
         </div>
       )}
 
       {currentStep === 4 && (
         <div className="reply">
           <h2>What is your first language?</h2>
-          {/* Render question 3 */}
-          <input></input>
+          <input onChange={handleAnswer}></input>
           {available&&<img src="src/assets/CheckBox.png" className="check"></img>}
-          <button onClick={() => handleAnswer('question3', 'answer1')}>Answer 1</button>
-          <button onClick={() => handleAnswer('question3', 'answer2')}>Answer 2</button>
         </div>
       )}
 
       {currentStep === 5 && (
         <div className="reply">
           <h2>Are you religious?</h2>
-          {/* Render question 3 */}
           <button onClick={() => {    
-                      setVisible(false)
-                    }} className="religionBtn">No. I am not</button> 
+                      setNoClicked(true);
+                      setYesClicked(false);
+                      setVisible(false);
+                    }} className={noClicked ? "religionBtn clicked" : "religionBtn"}>No. I am not</button> 
                 <button onClick={() => {
-                    setVisible(true)
-                }} className="religionBtn">Yes. I am.</button>
+                    setYesClicked(true);
+                    setNoClicked(false);
+                    setVisible(true);
+                }} className={yesClicked ? "religionBtn clicked" : "religionBtn"}>Yes. I am.</button>
                 {visible && <div>
                     <h2>Religion</h2>
-                    <input ></input>
+                    <input onChange={handleAnswer}></input>
                     {available&&<img src="src/assets/CheckBox.png" className="check"></img>}
                 </div>}
-          <button onClick={() => handleAnswer('question3', 'answer1')}>Answer 1</button>
-          <button onClick={() => handleAnswer('question3', 'answer2')}>Answer 2</button>
         </div>
       )}
 
       {currentStep === 6 && (
         <div className="reply">
           <h2>What is your job?</h2>
-          {/* Render question 3 */}
-          <input></input>
-          <button onClick={() => handleAnswer('question3', 'answer1')}>Answer 1</button>
-          <button onClick={() => handleAnswer('question3', 'answer2')}>Answer 2</button>
+          <input onChange={handleAnswer}></input>
         </div>
       )}
       <div id="footer">
         {currentStep < 6 && <button onClick={handleNextStep} className="goNext"><img src="src/assets/arrow-long-circle-right.png"/></button>}
         {currentStep === 6 && <button onClick={handleSendToDatabase} className="goNext"><img src="src/assets/arrow-long-circle-right.png"/></button>}
-        <button onClick={apiCall} id="apicall">Query Test</button>
       </div>
       
-    </div>
+    </div></div>
   );
 };
 

@@ -4,6 +4,7 @@ const { firebaseApp } = require('./dbconnect');
 const { getFirestore, collection, getDocs } = require("firebase/firestore");
 const admin = require('firebase-admin');
 const { doc, setDoc } = require("firebase/firestore"); 
+const bodyParser = require('body-parser');
 
 const db = getFirestore(firebaseApp);
 
@@ -89,20 +90,23 @@ app.get('/api/getRefugees', async (req, res) => {
   }
 });
 
-
+app.use(bodyParser.json());
 app.post('/api/addUser', async (req, res) => {
   try {
-    const { country, education, gender, language, name, religion, result, user_id } = req.body;
+    const randomUserId = generateUserId();
+    const randomCountry = getRandomCountry();
+    const { country, job, gender, language, name, religion } = req.body;
+    console.log(req.body);
 
-    await setDoc(doc(db, "users", `${name}-${user_id}`), {
+    await setDoc(doc(db, "users", `${name}-${randomUserId}`), {
       country : country,
-      education : education,
+      job : job,
       gender : gender,
       language : language,
+      result : randomCountry,
       name: name,
       religion: religion,
-      result: result,
-      user_id: user_id,
+      user_id: randomUserId,
     });
 
     res.status(201).send('User added successfully');
@@ -111,3 +115,23 @@ app.post('/api/addUser', async (req, res) => {
     res.status(500).send('Error adding user');
   }
 });
+
+const generateUserId = () => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const length = 10;
+  let userId = '';
+  
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    userId += characters[randomIndex];
+  }
+  
+  return userId;
+}
+
+const getRandomCountry = () => {
+  const countries = ['United States', 'United Kingdom', 'France', 'Japan', 'China', 'South Korea', 'Italy', 'Germany', 'Spain', 'Canada', 'Australia', 'Sweden'];
+  
+  const randomIndex = Math.floor(Math.random() * countries.length);
+  return countries[randomIndex];
+}

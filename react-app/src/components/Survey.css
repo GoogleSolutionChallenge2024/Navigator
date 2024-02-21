@@ -7,8 +7,18 @@
     height: 10vh;
     
 }
+.wrap {
+    display: flex;
+    /* text-align: center; */
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+}
 
 .display{
+    position: relative;
     background-color: white;
     width: 100vw;
     height: 100vh;
@@ -55,6 +65,7 @@ input{
 }
 
 .religionBtn{
+    cursor: pointer;
     width: 327px;
     height: 50px;
     background-color: rgb(249, 247, 247);
@@ -67,16 +78,26 @@ input{
 }
 
 #footer{
-    height:20vh;
-    width: 100vw;
+    /* height:20vh; */
+    width: 100%;
     position:relative;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .goNext{
-    position: absolute;
-    left: 85%;
-    top: 30%;
+    margin-right: 10px;
     background-color: white;
     width:fit-content;
     height: fit-content;
+    cursor: pointer;
+}
+
+input:focus {
+    font: inherit;
+    outline: none;
+}
+.clicked {
+    background-color: #454580;
+    color: white;
 }
