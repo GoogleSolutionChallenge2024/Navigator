@@ -75,9 +75,9 @@ const Survey = () => {
 
   const handleSendToDatabase = async () => {
     const answersWithDefaults = fillNullValues(answers, 'None');
-    console.log("보내기 전 ", answersWithDefaults);
+    console.log("before sending", answersWithDefaults);
     try {
-      const res = await axios.post('http://localhost:8080/api/addUser', answersWithDefaults);
+      const res = await axios.post('https://nevi.page:8080/api/addUser', answersWithDefaults);
       console.log(res);
     } catch (error) {
       console.error(error);
