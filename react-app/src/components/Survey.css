@@ -4,7 +4,8 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    height: 70px;
+    height: 10vh;
+    
 }
 
 .display{
@@ -22,32 +23,30 @@ body{
 #goBack{
     position: absolute;
     width: 10px;
-    top: 32%;
-    left: 2%;
+    top: 17%;
+    left: 3%;
     background-color: rgb(255,255,255);
     border: 0;
 }
 
-#goNext{
-    position: absolute;
-    bottom: 10%;
-    right: 10%;
-    background-color: white;
-    border: none;
-}
-
-
 .reply{
-    position: absolute;
-    left: 5%;
-    top: 10%;
+    height: 70vh;
+    margin-left: 5%;
 }
 
-#apicall{
+.reply button{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    color:grey;
+}
+
+/* #apicall{
     position: absolute;
     left: 5%;
     top: 50%;
-}
+} */
 
 input{
     width: 327px;
@@ -55,12 +54,29 @@ input{
     border-bottom: 2px solid #E6E6E6;
 }
 
-button{
+.religionBtn{
     width: 327px;
     height: 50px;
-    background-color: white;
+    background-color: rgb(249, 247, 247);
+    border-style: solid;
     border-radius: 10px;
-    border-color: grey;
+    border-color: rgb(82, 81, 81);
+    border-width: 1px;
     margin-bottom: 3px;
     font-size: 15px;
+}
+
+#footer{
+    height:20vh;
+    width: 100vw;
+    position:relative;
+}
+
+.goNext{
+    position: absolute;
+    left: 85%;
+    top: 30%;
+    background-color: white;
+    width:fit-content;
+    height: fit-content;
 }

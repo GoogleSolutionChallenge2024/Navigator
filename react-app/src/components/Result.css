@@ -8,11 +8,7 @@ button{
     border-color: #CCCCCC;
     margin-bottom: 3px;
     font-size: 15px;
-}
-
-#link{
-    background-color: #CCCCCC;
-    color: white;
+    font-weight: 900;
 }
 
 #goHome{
@@ -34,7 +30,7 @@ button{
     align-items: center;
     justify-content: center;
     color: white;
-    height: 90vh;
+    height: 60vh;
     h2 {
       text-align: center;
       margin: 0;
@@ -60,4 +56,5 @@ button{
     align-items: center;
     justify-content: center;
     color: white;
+    height: 30vh;
   }
