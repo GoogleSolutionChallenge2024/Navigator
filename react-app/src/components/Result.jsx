@@ -11,14 +11,14 @@ const Result = ({ analysis, website }) => {
       <div id="resultPrint">
         <h4 className="poppins-regular">The country that suits you is</h4>
         <h2 className="poppins-regular">{ analysis }</h2>
-        <div id="resultButtons">                  
+      </div>
+      <div id="resultButtons">                  
           <Link to={ website }>
               <button id="link">Go to the relevant website</button>
           </Link>
           <Link to="/Home">
             <button id="goHome">Go to search again</button>
           </Link>
-        </div>
       </div>
       
     </div>
