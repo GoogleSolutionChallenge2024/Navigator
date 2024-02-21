@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home'
 import Survey from './components/Survey'
 import Result from './components/Result'
-import Setting from './components/Setting';
-import Login from './components/Login';
 
 function App() {
   return (

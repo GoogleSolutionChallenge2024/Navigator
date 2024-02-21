@@ -3,6 +3,7 @@ import axios from 'axios';
 import './Survey.css';
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
+import arrowImg from '../assets/arrow-long-circle-right.png';
 
 const Survey = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -156,8 +157,8 @@ const Survey = () => {
         </div>
       )}
       <div id="footer">
-        {currentStep < 6 && <button onClick={handleNextStep} className="goNext"><img src="src/assets/arrow-long-circle-right.png"/></button>}
-        {currentStep === 6 && <button onClick={handleSendToDatabase} className="goNext"><img src="src/assets/arrow-long-circle-right.png"/></button>}
+        {currentStep < 6 && <button onClick={handleNextStep} className="goNext"><img src={arrowImg}/></button>}
+        {currentStep === 6 && <button onClick={handleSendToDatabase} className="goNext"><img src={arrowImg}/></button>}
       </div>
       
     </div></div>

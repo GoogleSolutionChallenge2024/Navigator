@@ -21,7 +21,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const whitelist = ['http://localhost:5173', "https://nevi.page", 'http://localhost:8080', "https://nevi-service-xivns55yhq-uw.a.run.app"]; 
+const whitelist = ['http://localhost:5173', "https://nevi.page", 'http://localhost:8080', "https://nevi-xivns55yhq-uw.a.run.app", "https://nevi-xivns55yhq-uw.a.run.app:5173/", "https://nevi-xivns55yhq-uw.a.run.app/survey", "https://nevi.page/survey"]; 
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin)) {
